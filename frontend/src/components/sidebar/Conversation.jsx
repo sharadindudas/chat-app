@@ -1,9 +1,12 @@
+import { useSocketContext } from "../../context/SocketContext";
 import useConversation from "../../zustand/useConversation";
 
 const Conversation = ({ conversation, emoji, lastIndex }) => {
     const { selectedConversation, setSelectedConversation } = useConversation();
 
     const isSelected = selectedConversation?._id === conversation._id;
+    const { onlineUsers } = useSocketContext();
+    const isOnline = onlineUsers?.includes(conversation._id);
 
     return (
         <>
@@ -22,7 +25,9 @@ const Conversation = ({ conversation, emoji, lastIndex }) => {
                     </div>
                     <div
                         aria-label="warning"
-                        className="status status-success absolute right-1"
+                        className={`status ${
+                            isOnline ? "status-success" : "status-error"
+                        } absolute right-1`}
                     ></div>
                 </div>
                 <div className="flex flex-col flex-1">
